@@ -26,6 +26,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.*
+import androidx.compose.animation.AnimatedVisibility
 
 
 data class CravingItem(
@@ -50,6 +52,10 @@ fun HomeScreen() {
         "🥪",
         "🍰"
     )
+    //personaje que te habla
+    var showMessage by remember {
+        mutableStateOf(false)
+    }
 
     Column(
         modifier = Modifier
@@ -111,38 +117,57 @@ fun HomeScreen() {
                 colors = CardDefaults.cardColors(
                     containerColor = Color(0xFFF1F6E6)
                 ),
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(20.dp),
                 elevation = CardDefaults.cardElevation(2.dp)
             ) {
 
-                Row(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .padding(18.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Text(
-                        text = "←",
-                        fontSize = 26.sp,
-                        color = Color(0xFFFFB347)
-                    )
+                    // Personaje
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFFFFE0B2))
+                            .clickable {
+
+                                showMessage = !showMessage
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        Text(
+                            text = "🐰",
+                            fontSize = 42.sp
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
 
                     Text(
-                        text = "Los antojos vienen principalmente de una compleja interacción entre el cerebro, las hormonas y las emociones, más que de una necesidad real de comida en el estómago.",
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center,
-                        fontSize = 14.sp,
-                        color = Color(0xFF6A6A6A),
-                        lineHeight = 20.sp
+                        text = "Si me tocas te explicaré",
+                        color = Color(0xFFFF9800),
+                        fontWeight = FontWeight.Bold
                     )
 
-                    Text(
-                        text = "→",
-                        fontSize = 26.sp,
-                        color = Color(0xFFFFB347)
-                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Mensaje
+                    AnimatedVisibility(visible = showMessage) {
+
+                        Text(
+                            text = "Los antojos vienen principalmente de una compleja interacción entre el cerebro, las hormonas y las emociones.",
+                            textAlign = TextAlign.Center,
+                            fontSize = 14.sp,
+                            color = Color(0xFF6A6A6A),
+                            lineHeight = 20.sp
+                        )
+                    }
                 }
             }
 
