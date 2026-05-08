@@ -1,6 +1,6 @@
 package com.example.cravebalance
 
-
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,30 +13,40 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+
+import androidx.compose.runtime.*
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+
 import androidx.compose.ui.tooling.preview.Preview
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.*
-import androidx.compose.animation.AnimatedVisibility
 
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 data class CravingItem(
     val title: String,
     val emoji: String
 )
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navController: NavController
+) {
 
     val cravings = listOf(
         CravingItem("Chocolate", "🍫"),
@@ -52,7 +62,8 @@ fun HomeScreen() {
         "🥪",
         "🍰"
     )
-    //personaje que te habla
+
+    // personaje que habla
     var showMessage by remember {
         mutableStateOf(false)
     }
@@ -64,7 +75,7 @@ fun HomeScreen() {
             .verticalScroll(rememberScrollState())
     ) {
 
-        // Header
+        // HEADER
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -102,6 +113,7 @@ fun HomeScreen() {
             modifier = Modifier.padding(horizontal = 18.dp)
         ) {
 
+            // TITULO
             Text(
                 text = "¿De donde vienen nuestros antojos?",
                 fontSize = 22.sp,
@@ -113,6 +125,7 @@ fun HomeScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // CARD PERSONAJE
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = Color(0xFFF1F6E6)
@@ -128,7 +141,7 @@ fun HomeScreen() {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    // Personaje
+                    // PERSONAJE
                     Box(
                         modifier = Modifier
                             .size(80.dp)
@@ -157,8 +170,10 @@ fun HomeScreen() {
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Mensaje
-                    AnimatedVisibility(visible = showMessage) {
+                    // MENSAJE
+                    AnimatedVisibility(
+                        visible = showMessage
+                    ) {
 
                         Text(
                             text = "Los antojos vienen principalmente de una compleja interacción entre el cerebro, las hormonas y las emociones.",
@@ -173,6 +188,7 @@ fun HomeScreen() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // TITULO ANTOJOS
             Text(
                 text = "Tengo antojo de...",
                 fontSize = 18.sp,
@@ -182,6 +198,7 @@ fun HomeScreen() {
 
             Spacer(modifier = Modifier.height(14.dp))
 
+            // GRID ANTOJOS
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -194,7 +211,12 @@ fun HomeScreen() {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { },
+                            .clickable {
+
+                                navController.navigate(
+                                    "detail/${item.title}"
+                                )
+                            },
                         shape = RoundedCornerShape(18.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = Color.White
@@ -205,7 +227,6 @@ fun HomeScreen() {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .horizontalScroll(rememberScrollState())
                                 .padding(
                                     horizontal = 14.dp,
                                     vertical = 14.dp
@@ -232,6 +253,7 @@ fun HomeScreen() {
 
             Spacer(modifier = Modifier.height(26.dp))
 
+            // TITULO RECETAS
             Text(
                 text = "Recetas que podrían gustarte",
                 fontSize = 18.sp,
@@ -241,8 +263,11 @@ fun HomeScreen() {
 
             Spacer(modifier = Modifier.height(14.dp))
 
+            // RECETAS
             Row(
-                modifier = Modifier.horizontalScroll(rememberScrollState()),
+                modifier = Modifier.horizontalScroll(
+                    rememberScrollState()
+                ),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
@@ -251,7 +276,6 @@ fun HomeScreen() {
                     Card(
                         modifier = Modifier
                             .width(150.dp)
-                            .horizontalScroll(rememberScrollState())
                             .height(220.dp),
                         shape = RoundedCornerShape(18.dp),
                         colors = CardDefaults.cardColors(
@@ -266,7 +290,7 @@ fun HomeScreen() {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
 
-                            // Imagen o emoji
+                            // IMAGEN
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -284,10 +308,10 @@ fun HomeScreen() {
 
                             Spacer(modifier = Modifier.height(10.dp))
 
-                            // Titulo receta
+                            // TITULO
                             Text(
-                                text = "Nada",
-                                fontSize = 18.sp,
+                                text = "Yogur con Cacao",
+                                fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFFFF9800),
                                 textAlign = TextAlign.Center
@@ -295,15 +319,19 @@ fun HomeScreen() {
 
                             Spacer(modifier = Modifier.height(10.dp))
 
-                            // Etiquetas
+                            // TAGS
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
 
                                 Box(
                                     modifier = Modifier
-                                        .clip(RoundedCornerShape(8.dp))
-                                        .background(Color(0xFFFFA726))
+                                        .clip(
+                                            RoundedCornerShape(8.dp)
+                                        )
+                                        .background(
+                                            Color(0xFFFFA726)
+                                        )
                                         .padding(
                                             horizontal = 10.dp,
                                             vertical = 4.dp
@@ -319,8 +347,12 @@ fun HomeScreen() {
 
                                 Box(
                                     modifier = Modifier
-                                        .clip(RoundedCornerShape(8.dp))
-                                        .background(Color(0xFFFFA726))
+                                        .clip(
+                                            RoundedCornerShape(8.dp)
+                                        )
+                                        .background(
+                                            Color(0xFFFFA726)
+                                        )
                                         .padding(
                                             horizontal = 10.dp,
                                             vertical = 4.dp
@@ -337,7 +369,7 @@ fun HomeScreen() {
 
                             Spacer(modifier = Modifier.height(12.dp))
 
-                            // Tiempo
+                            // TIEMPO
                             Text(
                                 text = "Tiempo: 5 minutos",
                                 fontSize = 11.sp,
@@ -348,9 +380,10 @@ fun HomeScreen() {
                     }
                 }
 
+                // FLECHA
                 Box(
                     modifier = Modifier
-                        .height(130.dp),
+                        .height(220.dp),
                     contentAlignment = Alignment.Center
                 ) {
 
@@ -375,7 +408,10 @@ fun PreviewHomeScreen() {
     MaterialTheme {
 
         Surface {
-            HomeScreen()
+
+            HomeScreen(
+                navController = rememberNavController()
+            )
         }
     }
 }
