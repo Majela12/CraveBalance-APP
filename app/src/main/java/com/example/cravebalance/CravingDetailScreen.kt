@@ -47,7 +47,13 @@ fun CravingDetailScreen(
         mutableStateOf(false)
     }
 
-    // DATOS SEGUN EL ANTOJO
+    // FILTRAR RECETAS
+    val filteredRecipes = recipes.filter {
+
+        it.cravingType == craving
+    }
+
+    // EMOJI PRINCIPAL
     val emoji = when (craving) {
 
         "Chocolate" -> "🍫"
@@ -60,36 +66,30 @@ fun CravingDetailScreen(
         else -> "🍽️"
     }
 
+    // EXPLICACION
     val explanation = when (craving) {
 
         "Chocolate" ->
-            "El antojo de chocolate proviene principalmente de una combinación de deficiencias nutricionales, emociones y búsqueda de placer."
+            "El antojo de chocolate proviene principalmente de emociones y búsqueda de placer."
 
         "Sal" ->
-            "Los antojos salados pueden aparecer por estrés, cansancio o deshidratación."
+            "Los antojos salados pueden aparecer por estrés o cansancio."
 
         "Azúcar" ->
-            "El cuerpo suele pedir azúcar cuando necesita energía rápida o existe fatiga."
+            "El cuerpo suele pedir azúcar cuando necesita energía rápida."
 
         "Leche" ->
-            "Los antojos de leche pueden relacionarse con necesidad de calcio o comodidad emocional."
+            "Los antojos de leche pueden relacionarse con comodidad emocional."
 
         "Pan" ->
-            "El pan suele generar sensación de satisfacción y energía inmediata."
+            "El pan suele generar sensación de satisfacción."
 
         "Hielo" ->
-            "Masticar hielo puede relacionarse con ansiedad o incluso deficiencia de hierro."
+            "Masticar hielo puede relacionarse con ansiedad."
 
         else ->
             "Cada antojo puede tener causas físicas y emocionales."
     }
-
-    val recipes = listOf(
-        "🥣",
-        "🍰",
-        "🍓",
-        "🍪"
-    )
 
     Column(
         modifier = Modifier
@@ -121,7 +121,7 @@ fun CravingDetailScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // IMAGEN GRANDE
+        // IMAGEN PRINCIPAL
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -162,37 +162,25 @@ fun CravingDetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                verticalAlignment = Alignment.CenterVertically
             ) {
 
-                // TEXTO
-                AnimatedVisibility(
-                    visible = showMessage
-                ) {
+                Text(
+                    text =
+                        if (showMessage)
+                            explanation
+                        else
+                            "Toca al personaje para aprender de donde viene este antojo",
 
-                    Text(
-                        text = explanation,
-                        modifier = Modifier.weight(1f),
-                        fontSize = 13.sp,
-                        color = Color(0xFF6A6A6A),
-                        lineHeight = 18.sp
-                    )
-                }
+                    modifier = Modifier.weight(1f),
 
-                if (!showMessage) {
+                    fontSize = 13.sp,
 
-                    Text(
-                        text = "Toca al personaje para aprender",
-                        modifier = Modifier.weight(1f),
-                        fontSize = 13.sp,
-                        color = Color.Gray
-                    )
-                }
+                    color = Color.Gray
+                )
 
                 Spacer(modifier = Modifier.width(12.dp))
 
-                // PERSONAJE
                 Box(
                     modifier = Modifier
                         .size(90.dp)
@@ -207,24 +195,6 @@ fun CravingDetailScreen(
                         text = "👧",
                         fontSize = 60.sp
                     )
-
-                    // PLAY BUTTON
-                    Box(
-                        modifier = Modifier
-                            .size(34.dp)
-                            .clip(CircleShape)
-                            .background(
-                                Color.Black.copy(alpha = 0.7f)
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-
-                        Text(
-                            text = "▶",
-                            color = Color.White,
-                            fontSize = 14.sp
-                        )
-                    }
                 }
             }
         }
@@ -233,7 +203,7 @@ fun CravingDetailScreen(
 
         // TITULO RECETAS
         Text(
-            text = "Pruebalas todas",
+            text = "Podría gustarte",
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFFFF9800),
@@ -243,7 +213,7 @@ fun CravingDetailScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // GRID RECETAS
+        // GRID
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -251,13 +221,21 @@ fun CravingDetailScreen(
             modifier = Modifier.height(500.dp)
         ) {
 
-            items(recipes) { recipe ->
+            items(filteredRecipes) { recipe ->
 
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(190.dp),
+                        .height(190.dp)
+                        .clickable {
+
+                            navController.navigate(
+                                "recipe/${recipe.title}"
+                            )
+                        },
+
                     shape = RoundedCornerShape(18.dp),
+
                     colors = CardDefaults.cardColors(
                         containerColor = Color.White
                     )
@@ -267,30 +245,30 @@ fun CravingDetailScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(10.dp),
+
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
-                        // IMAGEN
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(75.dp)
                                 .clip(RoundedCornerShape(14.dp))
                                 .background(Color(0xFFF7F0D8)),
+
                             contentAlignment = Alignment.Center
                         ) {
 
                             Text(
-                                text = recipe,
+                                text = recipe.emoji,
                                 fontSize = 38.sp
                             )
                         }
 
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        // TITULO
                         Text(
-                            text = "Yogur con Cacao",
+                            text = recipe.title,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFFFF9800),
@@ -299,54 +277,10 @@ fun CravingDetailScreen(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        // TAGS
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .background(Color(0xFFFFA726))
-                                    .padding(
-                                        horizontal = 8.dp,
-                                        vertical = 3.dp
-                                    )
-                            ) {
-
-                                Text(
-                                    text = "Cacao",
-                                    color = Color.White,
-                                    fontSize = 9.sp
-                                )
-                            }
-
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .background(Color(0xFFFFA726))
-                                    .padding(
-                                        horizontal = 8.dp,
-                                        vertical = 3.dp
-                                    )
-                            ) {
-
-                                Text(
-                                    text = "Yogurt",
-                                    color = Color.White,
-                                    fontSize = 9.sp
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        // TIEMPO
                         Text(
-                            text = "Tiempo: 5 minutos",
+                            text = "Tiempo: ${recipe.duration}",
                             fontSize = 10.sp,
-                            color = Color(0xFFFF9800),
-                            textAlign = TextAlign.Center
+                            color = Color(0xFFFF9800)
                         )
                     }
                 }

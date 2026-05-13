@@ -1,15 +1,17 @@
 package com.example.cravebalance
 
 import android.os.Bundle
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-
-import com.example.cravebalance.ui.theme.CraveBalanceTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -21,29 +23,51 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-            CraveBalanceTheme {
+            val navController =
+                rememberNavController()
 
-                val navController = rememberNavController()
+            MaterialTheme {
 
-                NavHost(
-                    navController = navController,
-                    startDestination = "home"
-                ) {
+                Surface {
 
-                    composable("home") {
+                    NavHost(
+                        navController = navController,
+                        startDestination = "home"
+                    ) {
 
-                        HomeScreen(navController)
-                    }
+                        // HOME
+                        composable("home") {
 
-                    composable("detail/{craving}") {
+                            HomeScreen(
+                                navController = navController
+                            )
+                        }
 
-                        val craving =
-                            it.arguments?.getString("craving") ?: ""
+                        // DETAIL
+                        composable("detail/{craving}") {
 
-                        CravingDetailScreen(
-                            craving = craving,
-                            navController = navController
-                        )
+                            val craving =
+                                it.arguments?.getString("craving")
+                                    ?: ""
+
+                            CravingDetailScreen(
+                                craving = craving,
+                                navController = navController
+                            )
+                        }
+
+                        // RECIPE DETAIL
+                        composable("recipe/{title}") {
+
+                            val title =
+                                it.arguments?.getString("title")
+                                    ?: ""
+
+                            RecipeDetailScreen(
+                                recipeTitle = title,
+                                navController = navController
+                            )
+                        }
                     }
                 }
             }
