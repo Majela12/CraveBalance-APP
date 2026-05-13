@@ -1,4 +1,4 @@
-package com.example.cravebalance
+package com.example.cravebalance.ui.element
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi

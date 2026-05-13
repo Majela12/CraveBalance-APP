@@ -1,4 +1,4 @@
-package com.example.cravebalance
+package com.example.cravebalance.ui.element
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -45,7 +45,9 @@ data class CravingItem(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
-    navController: NavController
+    onClickAddTouristicPlace: () -> Unit,
+    onLogout: () -> Unit,
+    onNavigateToDetail: (String) -> Unit
 ) {
 
     val cravings = listOf(
@@ -87,6 +89,7 @@ fun HomeScreen(
                     )
                 )
                 .background(Color(0xFFCBE39D))
+                .clickable { onLogout() } // Example logout trigger on header
         ) {
 
             Column(
@@ -212,10 +215,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-
-                                navController.navigate(
-                                    "detail/${item.title}"
-                                )
+                                onNavigateToDetail(item.title)
                             },
                         shape = RoundedCornerShape(18.dp),
                         colors = CardDefaults.cardColors(
@@ -410,7 +410,9 @@ fun PreviewHomeScreen() {
         Surface {
 
             HomeScreen(
-                navController = rememberNavController()
+                onClickAddTouristicPlace = {},
+                onLogout = {},
+                onNavigateToDetail = {}
             )
         }
     }
