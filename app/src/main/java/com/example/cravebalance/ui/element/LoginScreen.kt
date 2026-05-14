@@ -43,7 +43,7 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(vertical = 10.dp)
+                .padding(vertical = 5.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -137,7 +137,7 @@ fun LoginScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             // Navigation Link (Bottom)
             Text(
