@@ -10,68 +10,109 @@ data class Recipe(
 
     val duration: String,
 
-    val preparation: String,
+    val steps: List<String>,
 
-    val emoji: String
+    val imageRes: Int
 )
 
 val recipes = listOf(
 
     Recipe(
-        title = "Smoothie de chocolate",
+        title = "Smoothie de chocolate ANTI-ANTOJOS",
 
         cravingType = "Chocolate",
 
         ingredients = listOf(
-            "Blueberries",
-            "Cacao",
-            "Leche de almendra"
+            "1 taza de blueberries congeladas",
+            "1 pizca de sal (opcional)",
+            "1 taza de leche de almendra (o cualquier leche vegetal sin endulzar)",
+            "1/2 taza de leche de coco entera (opcional, es para hacerlo más cremoso) ",
+            "1 cucharada de cacao crudo orgánico en polvo (si no consigues orgánico, no te preocupes, sólo asegúrate que sea cacao y no esté endulzado)",
+            " 1 cucharada de aceite de coco",
+            "1 puño grande de almendras, nueces o semillas de tu preferencia (girasol,\n" +
+                    "calabaza, hemp, chia, linaza etc)\n",
+            "1/4 cucharadita de extracto de vainilla (sin alcohol)",
+            "1/2 cucharada de miel orgánica\n" +
+                    "(opcional)\n"
         ),
 
         duration = "5 minutos",
 
-        preparation =
-            "Pon todos los ingredientes en la licuadora y mezcla hasta que quede espumoso.",
+        steps = listOf(
 
-        emoji = "🥣"
+            "Pon todos los ingredientes en la licuadora y licúa hasta que la mezcla esté espumosa.",
+
+            "Fíjate bien que la textura no tenga una apariencia demasiado espesa al final, ¡pruébala y sirve!.",
+
+        ),
+
+        imageRes = R.drawable.smoothiechocolate
     ),
 
     Recipe(
-        title = "Brownie saludable",
+        title = "Pudín rápido de chocolate hecho con yogur",
 
         cravingType = "Chocolate",
 
         ingredients = listOf(
-            "Cacao",
-            "Avena",
-            "Banano"
+            "150 g de yogur griego blanco descremado",
+            "2 cucharaditas de cacao",
+            "20 g de proteína, xilitol u otro edulcorante",
+            "100 g de fruta congelada o fresca (cerezas, arándanos, frambuesas, etc.)"
         ),
 
-        duration = "10 minutos",
+        duration = "5 minutos",
 
-        preparation =
-            "Mezcla los ingredientes y hornea por 10 minutos.",
+        steps = listOf(
 
-        emoji = "🍰"
+            "Pon todos los ingredientes en una licuadora.",
+
+            "Bate a velocidad media hasta que el pudín esté suave y homogéneo y no se vean grumos de cacao.",
+
+            "Para un sabor más dulce, añade proteína, xilitol u otro edulcorante."
+        ),
+
+        imageRes = R.drawable.pudinchocolate
     ),
 
     Recipe(
-        title = "Yogurt con cacao",
+        title = "Parfait Saludable de Yogur Griego y Cacao",
 
         cravingType = "Chocolate",
 
         ingredients = listOf(
-            "Yogurt",
-            "Cacao",
-            "Miel"
+            "1 tazas de yogur griego natural",
+            "⅛ taza de cacao en polvo sin azúcar",
+            "1 cucharadas miel o sirope de agave",
+            "½ taza de granola",
+            "½ plátano en rodajas",
+            "¼ taza de fresas en rodajas",
+            "¼ taza de arándanos",
+            "⅛ cucharadita de extracto de vainilla",
+            "sal al gusto"
         ),
 
-        duration = "7 minutos",
+        duration = "15-20 minutos",
 
-        preparation =
-            "Mezcla el yogurt con cacao y añade miel.",
+        steps = listOf(
 
-        emoji = "🍓"
+            "En un bol grande, mezcla el yogur griego, el cacao en polvo, la miel (o sirope de agave) y el extracto de vainilla hasta que estén bien combinados y suaves.",
+
+            "En copas o vasos, coloca una capa de la mezcla de yogur en el fondo.",
+
+            "Agrega una capa de granola sobre el yogur.",
+
+            "Añade una capa de rodajas de plátano, fresas y arándanos.",
+
+            "Repite las capas hasta que los vasos estén llenos, terminando con una capa de frutas en la parte superior.",
+
+            "Espolvorea un poco de sal al gusto sobre las frutas para realzar los sabores.",
+
+            "Sirve inmediatamente o refrigera por un máximo de 1 hora antes de servir."
+
+        ),
+
+        imageRes = R.drawable.yogurtcacao
     ),
 
     Recipe(
@@ -86,10 +127,16 @@ val recipes = listOf(
 
         duration = "5 minutos",
 
-        preparation =
-            "Tuesta el pan y añade sal marina.",
+        steps = listOf(
 
-        emoji = "🥨"
+            "Tuesta el pan.",
+
+            "Agrega sal marina.",
+
+            "Sirve caliente."
+        ),
+
+        imageRes = R.drawable.snacksalado
     ),
 
     Recipe(
@@ -105,9 +152,15 @@ val recipes = listOf(
 
         duration = "8 minutos",
 
-        preparation =
-            "Prepara las tostadas y agrega queso.",
+        steps = listOf(
 
-        emoji = "🍞"
+            "Prepara las tostadas.",
+
+            "Añade queso.",
+
+            "Agrega sal al gusto."
+        ),
+
+        imageRes = R.drawable.tostadas
     )
 )

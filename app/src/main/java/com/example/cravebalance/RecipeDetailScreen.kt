@@ -1,5 +1,6 @@
 package com.example.cravebalance
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,6 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 
@@ -33,6 +37,8 @@ import androidx.compose.ui.unit.sp
 
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+
+import androidx.compose.ui.text.style.TextDecoration
 
 @Composable
 fun RecipeDetailScreen(
@@ -50,6 +56,11 @@ fun RecipeDetailScreen(
     var showPreparation by remember {
 
         mutableStateOf(false)
+    }
+
+    var currentStep by remember {
+
+        mutableStateOf(0)
     }
 
     Column(
@@ -83,21 +94,30 @@ fun RecipeDetailScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        // EMOJI
+        // IMAGEN
         Box(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
 
             contentAlignment = Alignment.Center
         ) {
 
-            Text(
-                text = recipe?.emoji ?: "🍽️",
-                fontSize = 110.sp
+            Image(
+                painter = painterResource(
+                    id = recipe?.imageRes
+                        ?: R.drawable.smoothiechocolate
+                ),
+
+                contentDescription = null,
+
+                modifier = Modifier
+                    .size(220.dp)
+                    .clip(RoundedCornerShape(24.dp)),
+
+                contentScale = ContentScale.Crop
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         // TITULO
         Text(
@@ -131,13 +151,26 @@ fun RecipeDetailScreen(
 
         recipe?.ingredients?.forEach { ingredient ->
 
+            var checked by remember {
+
+                mutableStateOf(false)
+            }
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp),
+                    .padding(bottom = 10.dp)
+                    .clickable {
+
+                        checked = !checked
+                    },
 
                 colors = CardDefaults.cardColors(
-                    containerColor = Color.White
+                    containerColor =
+                        if (checked)
+                            Color(0xFFE8F5E9)
+                        else
+                            Color.White
                 ),
 
                 shape = RoundedCornerShape(14.dp)
@@ -152,7 +185,10 @@ fun RecipeDetailScreen(
                 ) {
 
                     Text(
-                        text = "✨",
+                        text =
+                            if (checked) "✔"
+                            else "✨",
+
                         fontSize = 18.sp
                     )
 
@@ -161,9 +197,19 @@ fun RecipeDetailScreen(
                     Text(
                         text = ingredient,
 
-                        color = Color(0xFF6A6A6A),
+                        color =
+                            if (checked)
+                                Color.Gray
+                            else
+                                Color(0xFF6A6A6A),
 
-                        fontSize = 15.sp
+                        fontSize = 15.sp,
+
+                        textDecoration =
+                            if (checked)
+                                TextDecoration.LineThrough
+                            else
+                                TextDecoration.None
                     )
                 }
             }
@@ -230,9 +276,9 @@ fun RecipeDetailScreen(
                 Text(
                     text =
                         if (showPreparation)
-                            recipe?.preparation ?: ""
+                            recipe?.steps?.get(currentStep) ?: ""
                         else
-                            "Toca el personaje para comenzar",
+                            "Toca el personaje para comenzar y toca listo cada vez que termines una receta",
 
                     textAlign = TextAlign.Center,
 
@@ -240,6 +286,20 @@ fun RecipeDetailScreen(
 
                     lineHeight = 20.sp
                 )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                if (showPreparation) {
+
+                    Text(
+                        text =
+                            "Paso ${currentStep + 1} de ${recipe?.steps?.size}",
+
+                        color = Color(0xFFFF9800),
+
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
 
@@ -249,6 +309,13 @@ fun RecipeDetailScreen(
         Button(
             onClick = {
 
+                if (
+                    currentStep <
+                    (recipe?.steps?.size ?: 1) - 1
+                ) {
+
+                    currentStep++
+                }
             },
 
             modifier = Modifier

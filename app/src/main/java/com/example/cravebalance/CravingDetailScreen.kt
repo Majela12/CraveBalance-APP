@@ -1,15 +1,20 @@
 package com.example.cravebalance
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+
 import androidx.compose.foundation.rememberScrollState
+
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+
 import androidx.compose.foundation.verticalScroll
 
 import androidx.compose.material.icons.Icons
@@ -21,8 +26,13 @@ import androidx.compose.runtime.*
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+
+import androidx.compose.ui.layout.ContentScale
+
+import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,6 +53,7 @@ fun CravingDetailScreen(
 ) {
 
     var showMessage by remember {
+
         mutableStateOf(false)
     }
 
@@ -108,6 +119,7 @@ fun CravingDetailScreen(
 
                     navController.popBackStack()
                 },
+
             contentAlignment = Alignment.Center
         ) {
 
@@ -125,6 +137,7 @@ fun CravingDetailScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(180.dp),
+
             contentAlignment = Alignment.Center
         ) {
 
@@ -139,10 +152,15 @@ fun CravingDetailScreen(
         // TITULO
         Text(
             text = craving.uppercase(),
+
             modifier = Modifier.fillMaxWidth(),
+
             textAlign = TextAlign.Center,
+
             fontSize = 30.sp,
+
             fontWeight = FontWeight.ExtraBold,
+
             color = Color(0xFF9A5B2B)
         )
 
@@ -151,7 +169,9 @@ fun CravingDetailScreen(
         // CARD EXPLICACION
         Card(
             modifier = Modifier.fillMaxWidth(),
+
             shape = RoundedCornerShape(16.dp),
+
             colors = CardDefaults.cardColors(
                 containerColor = Color(0xFFF4F4F4)
             )
@@ -161,6 +181,7 @@ fun CravingDetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
+
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
@@ -180,6 +201,7 @@ fun CravingDetailScreen(
 
                 Spacer(modifier = Modifier.width(12.dp))
 
+                // PERSONAJE
                 Box(
                     modifier = Modifier
                         .size(90.dp)
@@ -187,6 +209,7 @@ fun CravingDetailScreen(
 
                             showMessage = !showMessage
                         },
+
                     contentAlignment = Alignment.Center
                 ) {
 
@@ -203,20 +226,28 @@ fun CravingDetailScreen(
         // TITULO RECETAS
         Text(
             text = "Podría gustarte",
+
             fontSize = 22.sp,
+
             fontWeight = FontWeight.Bold,
+
             color = Color(0xFFFF9800),
+
             modifier = Modifier.fillMaxWidth(),
+
             textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // GRID
+        // GRID RECETAS
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
+
             horizontalArrangement = Arrangement.spacedBy(12.dp),
+
             verticalArrangement = Arrangement.spacedBy(12.dp),
+
             modifier = Modifier.height(500.dp)
         ) {
 
@@ -225,7 +256,7 @@ fun CravingDetailScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(190.dp)
+                        .height(240.dp)
                         .clickable {
 
                             navController.navigate(
@@ -248,37 +279,92 @@ fun CravingDetailScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
-                        Box(
+                        // IMAGEN
+                        Image(
+                            painter = painterResource(
+                                id = recipe.imageRes
+                            ),
+
+                            contentDescription = null,
+
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(75.dp)
-                                .clip(RoundedCornerShape(14.dp))
-                                .background(Color(0xFFF7F0D8)),
+                                .height(90.dp)
+                                .clip(RoundedCornerShape(14.dp)),
 
-                            contentAlignment = Alignment.Center
+                            contentScale = ContentScale.Crop
+                        )
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        // TITULO
+                        Text(
+                            text = recipe.title,
+
+                            fontSize = 13.sp,
+
+                            fontWeight = FontWeight.Bold,
+
+                            color = Color(0xFFFF9800),
+
+                            textAlign = TextAlign.Center
+                        )
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        // TAGS
+                        Row(
+                            horizontalArrangement =
+                                Arrangement.spacedBy(6.dp)
                         ) {
 
-                            Text(
-                                text = recipe.emoji,
-                                fontSize = 38.sp
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(Color(0xFFFFA726))
+                                    .padding(
+                                        horizontal = 8.dp,
+                                        vertical = 3.dp
+                                    )
+                            ) {
+
+                                Text(
+                                    text = craving,
+
+                                    color = Color.White,
+
+                                    fontSize = 9.sp
+                                )
+                            }
+
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(Color(0xFFFFCC80))
+                                    .padding(
+                                        horizontal = 8.dp,
+                                        vertical = 3.dp
+                                    )
+                            ) {
+
+                                Text(
+                                    text = "Fácil",
+
+                                    color = Color.White,
+
+                                    fontSize = 9.sp
+                                )
+                            }
                         }
 
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        Text(
-                            text = recipe.title,
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFFFF9800),
-                            textAlign = TextAlign.Center
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
+                        // TIEMPO
                         Text(
                             text = "Tiempo: ${recipe.duration}",
+
                             fontSize = 10.sp,
+
                             color = Color(0xFFFF9800)
                         )
                     }
