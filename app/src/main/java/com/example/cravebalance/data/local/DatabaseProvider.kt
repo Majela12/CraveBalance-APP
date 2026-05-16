@@ -15,7 +15,9 @@ object DatabaseProvider {
                 context.applicationContext,
                 AppDatabase::class.java,
                 "cravebalance_database"
-            ).build()
+            )
+                .fallbackToDestructiveMigration()
+                .build()
 
             INSTANCE = instance
 

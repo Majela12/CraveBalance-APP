@@ -14,10 +14,17 @@ import com.example.cravebalance.ui.element.LoginScreen
 import com.example.cravebalance.ui.element.RegisterScreen
 import com.example.cravebalance.ui.element.RecoverScreen
 
+
+import com.example.cravebalance.viewmodel.RecipeViewModel
+
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    viewModel: RecipeViewModel
+
+) {
 
     val navController = rememberNavController()
+
 
     NavHost(
         navController = navController,
@@ -81,7 +88,8 @@ fun AppNavigation() {
 
             HomeScreen(
 
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         }
 
@@ -93,7 +101,8 @@ fun AppNavigation() {
 
             CravingDetailScreen(
                 craving = type,
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         }
 
@@ -105,7 +114,8 @@ fun AppNavigation() {
 
             RecipeDetailScreen(
                 recipeTitle = title,
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         }
     }

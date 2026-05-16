@@ -6,7 +6,7 @@ import com.example.cravebalance.data.Recipe
 
 @Database(
     entities = [Recipe::class],
-    version = 1
+    version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
 

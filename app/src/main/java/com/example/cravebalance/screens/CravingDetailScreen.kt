@@ -37,33 +37,33 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 
-import androidx.compose.ui.tooling.preview.Preview
-
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.cravebalance.data.repository.RecipeRepository
 
+import com.example.cravebalance.viewmodel.RecipeViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CravingDetailScreen(
+
     craving: String,
-    navController: NavController
+    navController: NavController,
+    viewModel: RecipeViewModel
+
 ) {
 
     var showMessage by remember {
-
         mutableStateOf(false)
     }
 
-    // FILTRAR RECETAS
-    val filteredRecipes = RecipeRepository.recipes.filter {
+    LaunchedEffect(craving) {
 
-        it.cravingType == craving
+        viewModel.loadRecipesByCraving(craving)
     }
+
+    val filteredRecipes by viewModel.recipes.collectAsState()
 
     // EMOJI PRINCIPAL
     val emoji = when (craving) {
@@ -85,19 +85,19 @@ fun CravingDetailScreen(
             "La carencia de ciertos minerales en el cuerpo, principalmente el magnesio, suele manifestarse en forma de antojo de chocolate."
 
         "Sal" ->
-            "Cuando el cuerpo pide sal, generalmente indica una necesidad urgente de sodio, a menudo provocada por deshidratación, sudoración excesiva, estrés o desequilibrios hormonales. Recuerda que la ingesta diaria recomendada de sodio es de 2300 miligramos de sodio."
+            "Cuando el cuerpo pide sal, generalmente indica una necesidad urgente de sodio."
 
         "Azúcar" ->
-            "Los antojos de azúcar pueden ser causados \u200B\u200Bpor niveles bajos de azúcar en la sangre, estrés y desequilibrios hormonales.Deberias incluir proteína y fibra ya que ayuda a estabilizar la glucosa y evitar los picos y caídas de energía."
+            "Los antojos de azúcar pueden ser causados por niveles bajos de azúcar."
 
         "Leche" ->
-            "La leche es fuente de calcio, proteínas, grasas, yodo y vitamina D. Si tu dieta carece de ellos, tu cuerpo puede pedirte estos elementos."
+            "La leche es fuente de calcio, proteínas y vitamina D."
 
         "Pan" ->
-            "Si el antojo es por productos de panadería, como panes, galletas o tostadas, el cuerpo podría estar pidiendo magnesio y triptófano, esenciales para la producción de serotonina: la hormona del bienestar."
+            "El cuerpo podría estar pidiendo magnesio y triptófano."
 
         "Hielo" ->
-            "Puede estar relacionado con deficiencias nutricionales Relacionadas con la falta de otros minerales como el zinc o por trastornos como la desnutrición durante el embarazo."
+            "Puede estar relacionado con deficiencias nutricionales."
 
         else ->
             "Cada antojo puede tener causas físicas y emocionales."
@@ -134,7 +134,7 @@ fun CravingDetailScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // IMAGEN PRINCIPAL
+        // EMOJI
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -192,7 +192,7 @@ fun CravingDetailScreen(
                         if (showMessage)
                             explanation
                         else
-                            "Toca al personaje para aprender de donde viene este antojo",
+                            "Toca el personaje para aprender de donde viene este antojo",
 
                     modifier = Modifier.weight(1f),
 
@@ -203,7 +203,6 @@ fun CravingDetailScreen(
 
                 Spacer(modifier = Modifier.width(12.dp))
 
-                // PERSONAJE
                 Box(
                     modifier = Modifier
                         .size(90.dp)
@@ -225,7 +224,6 @@ fun CravingDetailScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // TITULO RECETAS
         Text(
             text = "Podría gustarte",
 
@@ -242,7 +240,6 @@ fun CravingDetailScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // GRID RECETAS
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
 
@@ -258,7 +255,7 @@ fun CravingDetailScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(240.dp)
+                        .height(270.dp)
                         .clickable {
 
                             navController.navigate(
@@ -278,10 +275,11 @@ fun CravingDetailScreen(
                             .fillMaxSize()
                             .padding(10.dp),
 
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceBetween
+
                     ) {
 
-                        // IMAGEN
                         Image(
                             painter = painterResource(
                                 id = recipe.imageRes
@@ -299,7 +297,6 @@ fun CravingDetailScreen(
 
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        // TITULO
                         Text(
                             text = recipe.title,
 
@@ -314,54 +311,6 @@ fun CravingDetailScreen(
 
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        // TAGS
-                        Row(
-                            horizontalArrangement =
-                                Arrangement.spacedBy(6.dp)
-                        ) {
-
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .background(Color(0xFFFFA726))
-                                    .padding(
-                                        horizontal = 8.dp,
-                                        vertical = 3.dp
-                                    )
-                            ) {
-
-                                Text(
-                                    text = craving,
-
-                                    color = Color.White,
-
-                                    fontSize = 9.sp
-                                )
-                            }
-
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .background(Color(0xFFFFCC80))
-                                    .padding(
-                                        horizontal = 8.dp,
-                                        vertical = 3.dp
-                                    )
-                            ) {
-
-                                Text(
-                                    text = "Fácil",
-
-                                    color = Color.White,
-
-                                    fontSize = 9.sp
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        // TIEMPO
                         Text(
                             text = "Tiempo: ${recipe.duration}",
 
@@ -372,22 +321,6 @@ fun CravingDetailScreen(
                     }
                 }
             }
-        }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewCravingDetailScreen() {
-
-    MaterialTheme {
-
-        Surface {
-
-            CravingDetailScreen(
-                craving = "Chocolate",
-                navController = rememberNavController()
-            )
         }
     }
 }

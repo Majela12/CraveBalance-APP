@@ -31,37 +31,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 
-import androidx.compose.ui.tooling.preview.Preview
-
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.cravebalance.R
 
-import com.example.cravebalance.data.repository.RecipeRepository
+import com.example.cravebalance.R
+import com.example.cravebalance.viewmodel.RecipeViewModel
+
 
 @Composable
 fun RecipeDetailScreen(
 
     recipeTitle: String,
 
-    navController: NavController
+    navController: NavController,
+
+    viewModel: RecipeViewModel
 ) {
 
-    val recipe = RecipeRepository.recipes.find {
+    LaunchedEffect(recipeTitle) {
 
-        it.title == recipeTitle
+        viewModel.loadRecipe(recipeTitle)
     }
 
-    var showPreparation by remember {
+    val recipe by viewModel.selectedRecipe.collectAsState()
 
+    var showPreparation by remember {
         mutableStateOf(false)
     }
 
     var currentStep by remember {
-
         mutableStateOf(0)
     }
 
@@ -147,71 +147,72 @@ fun RecipeDetailScreen(
 
         Spacer(modifier = Modifier.height(14.dp))
 
-        recipe?.ingredients?.forEach { ingredient ->
+        recipe?.ingredients
+            ?.split("\n")
+            ?.forEach { ingredient ->
 
-            var checked by remember {
+                var checked by remember {
+                    mutableStateOf(false)
+                }
 
-                mutableStateOf(false)
-            }
-
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 10.dp)
-                    .clickable {
-
-                        checked = !checked
-                    },
-
-                colors = CardDefaults.cardColors(
-                    containerColor =
-                        if (checked)
-                            Color(0xFFE8F5E9)
-                        else
-                            Color.White
-                ),
-
-                shape = RoundedCornerShape(14.dp)
-            ) {
-
-                Row(
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(14.dp),
+                        .padding(bottom = 10.dp)
+                        .clickable {
 
-                    verticalAlignment = Alignment.CenterVertically
+                            checked = !checked
+                        },
+
+                    colors = CardDefaults.cardColors(
+                        containerColor =
+                            if (checked)
+                                Color(0xFFE8F5E9)
+                            else
+                                Color.White
+                    ),
+
+                    shape = RoundedCornerShape(14.dp)
                 ) {
 
-                    Text(
-                        text =
-                            if (checked) "✔"
-                            else "✨",
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(14.dp),
 
-                        fontSize = 18.sp
-                    )
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
 
-                    Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text =
+                                if (checked) "✔"
+                                else "✨",
 
-                    Text(
-                        text = ingredient,
+                            fontSize = 18.sp
+                        )
 
-                        color =
-                            if (checked)
-                                Color.Gray
-                            else
-                                Color(0xFF6A6A6A),
+                        Spacer(modifier = Modifier.width(10.dp))
 
-                        fontSize = 15.sp,
+                        Text(
+                            text = ingredient,
 
-                        textDecoration =
-                            if (checked)
-                                TextDecoration.LineThrough
-                            else
-                                TextDecoration.None
-                    )
+                            color =
+                                if (checked)
+                                    Color.Gray
+                                else
+                                    Color(0xFF6A6A6A),
+
+                            fontSize = 15.sp,
+
+                            textDecoration =
+                                if (checked)
+                                    TextDecoration.LineThrough
+                                else
+                                    TextDecoration.None
+                        )
+                    }
                 }
             }
-        }
 
         Spacer(modifier = Modifier.height(22.dp))
 
@@ -256,7 +257,10 @@ fun RecipeDetailScreen(
                 Text(
                     text =
                         if (showPreparation)
-                            recipe?.steps?.get(currentStep) ?: ""
+                            recipe?.steps
+                                ?.split("\n")
+                                ?.get(currentStep)
+                                ?: ""
                         else
                             "Toca el personaje para comenzar",
 
@@ -273,7 +277,11 @@ fun RecipeDetailScreen(
 
                     Text(
                         text =
-                            "Paso ${currentStep + 1} de ${recipe?.steps?.size}",
+                            "Paso ${currentStep + 1} de ${
+                                recipe?.steps
+                                    ?.split("\n")
+                                    ?.size
+                            }",
 
                         color = Color(0xFFFF9800),
 
@@ -285,56 +293,81 @@ fun RecipeDetailScreen(
 
         Spacer(modifier = Modifier.height(26.dp))
 
-        Button(
-            onClick = {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
 
-                if (
-                    currentStep <
-                    (recipe?.steps?.size ?: 1) - 1
-                ) {
-
-                    currentStep++
-                }
-            },
-
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFCBE39D)
-            ),
-
-            shape = RoundedCornerShape(18.dp)
+            horizontalArrangement =
+                Arrangement.spacedBy(12.dp)
         ) {
 
-            Text(
-                text = "LISTO",
+            // BOTON ANTERIOR
+            Button(
+                onClick = {
 
-                color = Color.White,
+                    if (currentStep > 0) {
 
-                fontWeight = FontWeight.Bold,
+                        currentStep--
+                    }
+                },
 
-                fontSize = 16.sp
-            )
+                modifier = Modifier
+                    .weight(1f)
+                    .height(56.dp),
+
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFFCC80)
+                ),
+
+                shape = RoundedCornerShape(18.dp)
+            ) {
+
+                Text(
+                    text = "← Anterior",
+
+                    color = Color.White,
+
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            // BOTON SIGUIENTE
+            Button(
+                onClick = {
+
+                    if (
+                        currentStep <
+                        (
+                                recipe?.steps
+                                    ?.split("\n")
+                                    ?.size ?: 1
+                                ) - 1
+                    ) {
+
+                        currentStep++
+                    }
+                },
+
+                modifier = Modifier
+                    .weight(1f)
+                    .height(56.dp),
+
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFCBE39D)
+                ),
+
+                shape = RoundedCornerShape(18.dp)
+            ) {
+
+                Text(
+                    text = "Siguiente →",
+
+                    color = Color.White,
+
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(30.dp))
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewRecipeDetailScreen() {
-
-    MaterialTheme {
-
-        Surface {
-
-            RecipeDetailScreen(
-                recipeTitle = "Smoothie de chocolate ANTI-ANTOJOS",
-                navController = rememberNavController()
-            )
-        }
     }
 }
