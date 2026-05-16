@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -38,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
-import androidx.compose.ui.text.style.TextDecoration
+import com.example.cravebalance.data.RecipeRepository
 
 @Composable
 fun RecipeDetailScreen(
@@ -48,7 +49,7 @@ fun RecipeDetailScreen(
     navController: NavController
 ) {
 
-    val recipe = recipes.find {
+    val recipe = RecipeRepository.recipes.find {
 
         it.title == recipeTitle
     }
@@ -71,7 +72,6 @@ fun RecipeDetailScreen(
             .padding(16.dp)
     ) {
 
-        // BOTON VOLVER
         Box(
             modifier = Modifier
                 .size(42.dp)
@@ -94,7 +94,6 @@ fun RecipeDetailScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        // IMAGEN
         Box(
             modifier = Modifier.fillMaxWidth(),
 
@@ -119,7 +118,6 @@ fun RecipeDetailScreen(
 
         Spacer(modifier = Modifier.height(14.dp))
 
-        // TITULO
         Text(
             text = recipe?.title ?: "",
 
@@ -136,7 +134,6 @@ fun RecipeDetailScreen(
 
         Spacer(modifier = Modifier.height(22.dp))
 
-        // INGREDIENTES
         Text(
             text = "Ingredientes",
 
@@ -217,7 +214,6 @@ fun RecipeDetailScreen(
 
         Spacer(modifier = Modifier.height(22.dp))
 
-        // PERSONAJE
         Card(
             modifier = Modifier.fillMaxWidth(),
 
@@ -252,23 +248,6 @@ fun RecipeDetailScreen(
                         text = "👩",
                         fontSize = 60.sp
                     )
-
-                    Box(
-                        modifier = Modifier
-                            .size(34.dp)
-                            .clip(CircleShape)
-                            .background(
-                                Color.Black.copy(alpha = 0.7f)
-                            ),
-
-                        contentAlignment = Alignment.Center
-                    ) {
-
-                        Text(
-                            text = "▶",
-                            color = Color.White
-                        )
-                    }
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -278,7 +257,7 @@ fun RecipeDetailScreen(
                         if (showPreparation)
                             recipe?.steps?.get(currentStep) ?: ""
                         else
-                            "Toca el personaje para comenzar y toca listo cada vez que termines una receta",
+                            "Toca el personaje para comenzar",
 
                     textAlign = TextAlign.Center,
 
@@ -305,7 +284,6 @@ fun RecipeDetailScreen(
 
         Spacer(modifier = Modifier.height(26.dp))
 
-        // BOTON
         Button(
             onClick = {
 
@@ -353,7 +331,7 @@ fun PreviewRecipeDetailScreen() {
         Surface {
 
             RecipeDetailScreen(
-                recipeTitle = "Smoothie de chocolate",
+                recipeTitle = "Smoothie de chocolate ANTI-ANTOJOS",
                 navController = rememberNavController()
             )
         }

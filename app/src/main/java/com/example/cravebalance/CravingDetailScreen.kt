@@ -44,6 +44,8 @@ import androidx.compose.ui.unit.sp
 
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.cravebalance.data.RecipeRepository
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -58,7 +60,7 @@ fun CravingDetailScreen(
     }
 
     // FILTRAR RECETAS
-    val filteredRecipes = recipes.filter {
+    val filteredRecipes = RecipeRepository.recipes.filter {
 
         it.cravingType == craving
     }
@@ -80,22 +82,22 @@ fun CravingDetailScreen(
     val explanation = when (craving) {
 
         "Chocolate" ->
-            "El antojo de chocolate proviene principalmente de emociones y búsqueda de placer."
+            "La carencia de ciertos minerales en el cuerpo, principalmente el magnesio, suele manifestarse en forma de antojo de chocolate."
 
         "Sal" ->
-            "Los antojos salados pueden aparecer por estrés o cansancio."
+            "Cuando el cuerpo pide sal, generalmente indica una necesidad urgente de sodio, a menudo provocada por deshidratación, sudoración excesiva, estrés o desequilibrios hormonales. Recuerda que la ingesta diaria recomendada de sodio es de 2300 miligramos de sodio."
 
         "Azúcar" ->
-            "El cuerpo suele pedir azúcar cuando necesita energía rápida."
+            "Los antojos de azúcar pueden ser causados \u200B\u200Bpor niveles bajos de azúcar en la sangre, estrés y desequilibrios hormonales.Deberias incluir proteína y fibra ya que ayuda a estabilizar la glucosa y evitar los picos y caídas de energía."
 
         "Leche" ->
-            "Los antojos de leche pueden relacionarse con comodidad emocional."
+            "La leche es fuente de calcio, proteínas, grasas, yodo y vitamina D. Si tu dieta carece de ellos, tu cuerpo puede pedirte estos elementos."
 
         "Pan" ->
-            "El pan suele generar sensación de satisfacción."
+            "Si el antojo es por productos de panadería, como panes, galletas o tostadas, el cuerpo podría estar pidiendo magnesio y triptófano, esenciales para la producción de serotonina: la hormona del bienestar."
 
         "Hielo" ->
-            "Masticar hielo puede relacionarse con ansiedad."
+            "Puede estar relacionado con deficiencias nutricionales Relacionadas con la falta de otros minerales como el zinc o por trastornos como la desnutrición durante el embarazo."
 
         else ->
             "Cada antojo puede tener causas físicas y emocionales."
