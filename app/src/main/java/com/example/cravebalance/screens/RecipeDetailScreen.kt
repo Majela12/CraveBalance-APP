@@ -1,4 +1,4 @@
-package com.example.cravebalance
+package com.example.cravebalance.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.cravebalance.R
 
 import com.example.cravebalance.data.RecipeRepository
 

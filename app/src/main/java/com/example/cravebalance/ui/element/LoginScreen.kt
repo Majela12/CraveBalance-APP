@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
@@ -112,7 +113,8 @@ fun LoginScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 4.dp)
-                            .clickable { onNavigateToRecover() },
+                            .clickable { onNavigateToRecover()
+                                       },
                         textAlign = TextAlign.End
                     )
                 }

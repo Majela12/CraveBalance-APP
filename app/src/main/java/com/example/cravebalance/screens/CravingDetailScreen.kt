@@ -1,4 +1,4 @@
-package com.example.cravebalance
+package com.example.cravebalance.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ExperimentalFoundationApi

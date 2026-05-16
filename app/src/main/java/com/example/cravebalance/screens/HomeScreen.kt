@@ -1,4 +1,4 @@
-package com.example.cravebalance.ui.element
+package com.example.cravebalance.screens
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -6,12 +6,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+
 import androidx.compose.foundation.rememberScrollState
+
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+
 import androidx.compose.foundation.verticalScroll
 
 import androidx.compose.material.icons.Icons
@@ -23,6 +27,7 @@ import androidx.compose.runtime.*
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 
@@ -38,6 +43,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
 data class CravingItem(
+
     val title: String,
     val emoji: String
 )
@@ -45,12 +51,12 @@ data class CravingItem(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
-    onClickAddTouristicPlace: () -> Unit,
-    onLogout: () -> Unit,
-    onNavigateToDetail: (String) -> Unit
+
+    navController: NavController
 ) {
 
     val cravings = listOf(
+
         CravingItem("Chocolate", "🍫"),
         CravingItem("Sal", "🧂"),
         CravingItem("Azúcar", "🍬"),
@@ -65,8 +71,8 @@ fun HomeScreen(
         "🍰"
     )
 
-    // personaje que habla
     var showMessage by remember {
+
         mutableStateOf(false)
     }
 
@@ -89,13 +95,13 @@ fun HomeScreen(
                     )
                 )
                 .background(Color(0xFFCBE39D))
-                .clickable { onLogout() } // Example logout trigger on header
         ) {
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 18.dp),
+
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
@@ -103,9 +109,12 @@ fun HomeScreen(
 
                 Text(
                     text = "BIENVENIDO",
+
                     fontSize = 30.sp,
+
                     fontWeight = FontWeight.ExtraBold,
-                    color = Color(0xFFA5C86D)
+
+                    color = Color.White
                 )
             }
         }
@@ -118,11 +127,16 @@ fun HomeScreen(
 
             // TITULO
             Text(
-                text = "¿De donde vienen nuestros antojos?",
+                text = "¿De dónde vienen nuestros antojos?",
+
                 fontSize = 22.sp,
+
                 fontWeight = FontWeight.Bold,
+
                 color = Color(0xFFB7D97D),
+
                 textAlign = TextAlign.Center,
+
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -133,7 +147,9 @@ fun HomeScreen(
                 colors = CardDefaults.cardColors(
                     containerColor = Color(0xFFF1F6E6)
                 ),
+
                 shape = RoundedCornerShape(20.dp),
+
                 elevation = CardDefaults.cardElevation(2.dp)
             ) {
 
@@ -141,10 +157,10 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(18.dp),
+
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    // PERSONAJE
                     Box(
                         modifier = Modifier
                             .size(80.dp)
@@ -154,6 +170,7 @@ fun HomeScreen(
 
                                 showMessage = !showMessage
                             },
+
                         contentAlignment = Alignment.Center
                     ) {
 
@@ -167,22 +184,27 @@ fun HomeScreen(
 
                     Text(
                         text = "Si me tocas te explicaré",
+
                         color = Color(0xFFFF9800),
+
                         fontWeight = FontWeight.Bold
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // MENSAJE
                     AnimatedVisibility(
                         visible = showMessage
                     ) {
 
                         Text(
-                            text = "Los antojos vienen principalmente de una compleja interacción entre el cerebro, las hormonas y las emociones.",
+                            text = "Los antojos vienen principalmente del cerebro, emociones y hormonas.",
+
                             textAlign = TextAlign.Center,
+
                             fontSize = 14.sp,
+
                             color = Color(0xFF6A6A6A),
+
                             lineHeight = 20.sp
                         )
                     }
@@ -191,21 +213,27 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // TITULO ANTOJOS
+            // TITULO
             Text(
                 text = "Tengo antojo de...",
+
                 fontSize = 18.sp,
+
                 fontWeight = FontWeight.SemiBold,
+
                 color = Color(0xFFFFB347)
             )
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            // GRID ANTOJOS
+            // GRID
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
+
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
+
                 verticalArrangement = Arrangement.spacedBy(12.dp),
+
                 modifier = Modifier.height(220.dp)
             ) {
 
@@ -215,13 +243,17 @@ fun HomeScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                onNavigateToDetail(item.title)
+
+                                navController.navigate(
+                                    "craving/${item.title}"
+                                )
                             },
+
                         shape = RoundedCornerShape(18.dp),
+
                         colors = CardDefaults.cardColors(
                             containerColor = Color.White
-                        ),
-                        elevation = CardDefaults.cardElevation(1.dp)
+                        )
                     ) {
 
                         Row(
@@ -231,8 +263,11 @@ fun HomeScreen(
                                     horizontal = 14.dp,
                                     vertical = 14.dp
                                 ),
+
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
+
+                            horizontalArrangement =
+                                Arrangement.SpaceBetween
                         ) {
 
                             Text(
@@ -242,157 +277,15 @@ fun HomeScreen(
 
                             Text(
                                 text = item.title,
+
                                 color = Color(0xFFFFA552),
+
                                 fontWeight = FontWeight.Medium,
+
                                 fontSize = 16.sp
                             )
                         }
                     }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(26.dp))
-
-            // TITULO RECETAS
-            Text(
-                text = "Recetas que podrían gustarte",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFFA5C86D)
-            )
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            // RECETAS
-            Row(
-                modifier = Modifier.horizontalScroll(
-                    rememberScrollState()
-                ),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-
-                recipes.forEach { recipe ->
-
-                    Card(
-                        modifier = Modifier
-                            .width(150.dp)
-                            .height(220.dp),
-                        shape = RoundedCornerShape(18.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color.White
-                        )
-                    ) {
-
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(10.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-
-                            // IMAGEN
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(90.dp)
-                                    .clip(RoundedCornerShape(14.dp))
-                                    .background(Color(0xFFF7F0D8)),
-                                contentAlignment = Alignment.Center
-                            ) {
-
-                                Text(
-                                    text = recipe,
-                                    fontSize = 40.sp
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.height(10.dp))
-
-                            // TITULO
-                            Text(
-                                text = "Yogur con Cacao",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFFFF9800),
-                                textAlign = TextAlign.Center
-                            )
-
-                            Spacer(modifier = Modifier.height(10.dp))
-
-                            // TAGS
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-
-                                Box(
-                                    modifier = Modifier
-                                        .clip(
-                                            RoundedCornerShape(8.dp)
-                                        )
-                                        .background(
-                                            Color(0xFFFFA726)
-                                        )
-                                        .padding(
-                                            horizontal = 10.dp,
-                                            vertical = 4.dp
-                                        )
-                                ) {
-
-                                    Text(
-                                        text = "Cacao",
-                                        color = Color.White,
-                                        fontSize = 11.sp
-                                    )
-                                }
-
-                                Box(
-                                    modifier = Modifier
-                                        .clip(
-                                            RoundedCornerShape(8.dp)
-                                        )
-                                        .background(
-                                            Color(0xFFFFA726)
-                                        )
-                                        .padding(
-                                            horizontal = 10.dp,
-                                            vertical = 4.dp
-                                        )
-                                ) {
-
-                                    Text(
-                                        text = "Yogurt",
-                                        color = Color.White,
-                                        fontSize = 11.sp
-                                    )
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(12.dp))
-
-                            // TIEMPO
-                            Text(
-                                text = "Tiempo: 5 minutos",
-                                fontSize = 11.sp,
-                                color = Color(0xFFFF9800),
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
-
-                // FLECHA
-                Box(
-                    modifier = Modifier
-                        .height(220.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Default.ArrowForward,
-                        contentDescription = null,
-                        tint = Color(0xFFFFB347),
-                        modifier = Modifier.size(28.dp)
-                    )
                 }
             }
 
@@ -410,9 +303,7 @@ fun PreviewHomeScreen() {
         Surface {
 
             HomeScreen(
-                onClickAddTouristicPlace = {},
-                onLogout = {},
-                onNavigateToDetail = {}
+                navController = rememberNavController()
             )
         }
     }
