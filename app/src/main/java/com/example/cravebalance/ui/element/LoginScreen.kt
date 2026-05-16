@@ -1,5 +1,6 @@
 package com.example.cravebalance.ui.element
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -20,6 +22,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
+import com.example.cravebalance.navigation.validarionPassword
+import com.example.cravebalance.navigation.validationEmail
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.auth
+import kotlin.math.log
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,8 +39,14 @@ fun LoginScreen(
     onNavigateToRegister: () -> Unit,
     onNavigateToRecover: () -> Unit
 ) {
+    val auth = Firebase.auth
+    val activity = LocalView.current.context as Activity
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var loginError by remember { mutableStateOf("") }
+    var emailError by remember { mutableStateOf("") }
+    var passwordError by remember { mutableStateOf("") }
 
     val backgroundColor = Color(0xFFD6E9AF)
     val orangeColor = Color(0xFFF6921E)
@@ -122,9 +138,39 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
 
+            if (loginError.isNotEmpty()){
+                Text(
+                    loginError,
+                    color = Color.Red,
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                )
+            }
+
             // Action Button
             Button(
-                onClick = { onLoginSuccess() },
+                onClick = {
+                    val isValidEmail:Boolean = validationEmail(email).first
+                    val isValidPassword = validarionPassword(password).first
+
+                    emailError = validationEmail(email).second
+                    password = validarionPassword(password).second
+
+                    if (isValidEmail&&isValidPassword){
+                        auth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(activity) { task ->
+                                if (task.isSuccessful){
+                                    onLoginSuccess()
+                                }else{
+                                    loginError = when(task.exception){
+                                        is FirebaseAuthInvalidCredentialsException -> "Correo o contraseña incorrecto"
+                                        is FirebaseAuthInvalidUserException -> "No existe la cuenta de este correo"
+                                        else -> "Error al iniciar sesion, intentelo de nuevo"
+                                    }
+                                }
+                            }
+                    }
+
+                 },
                 colors = ButtonDefaults.buttonColors(containerColor = orangeColor),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier

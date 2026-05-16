@@ -2,11 +2,11 @@ plugins {
 
     alias(libs.plugins.android.application)
 
-    alias(libs.plugins.kotlin.android)
-
     alias(libs.plugins.kotlin.compose)
 
     alias(libs.plugins.ksp)
+
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -57,9 +57,10 @@ android {
             JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
     }
 
     buildFeatures {
@@ -131,4 +132,10 @@ dependencies {
     debugImplementation(
         libs.androidx.compose.ui.test.manifest
     )
+
+    //FireBase
+    implementation(platform(libs.firebase.bom))
+
+    //auth
+    implementation(libs.firebase.auth)
 }

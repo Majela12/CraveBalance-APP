@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "26302424569",
+    "project_id": "proyectocravebalance",
+    "storage_bucket": "proyectocravebalance.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:26302424569:android:137ebaebe13a18318dc928",
+        "android_client_info": {
+          "package_name": "com.example.cravebalance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA0oooVg0oYgEFZJsf9oCEF-fw31pXCk8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
