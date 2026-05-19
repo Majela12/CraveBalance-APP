@@ -16,38 +16,41 @@ import com.example.cravebalance.ui.element.RecoverScreen
 
 
 import com.example.cravebalance.viewmodel.RecipeViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 @Composable
 fun AppNavigation(
     viewModel: RecipeViewModel
-
 ) {
-
     val navController = rememberNavController()
+    val auth = Firebase.auth
+    val currentUser = auth.currentUser
+
+    val myStartDestination: String = if (currentUser != null){
+        "home"
+    }else{
+        "login"
+    }
 
 
     NavHost(
         navController = navController,
-        startDestination = "login"
+        startDestination = myStartDestination
     ) {
 
         // LOGIN
         composable("login") {
-
             LoginScreen(
-
                 onLoginSuccess = {
-
                     navController.navigate("home")
                 },
 
                 onNavigateToRegister = {
-
                     navController.navigate("register")
                 },
 
                 onNavigateToRecover = {
-
                     navController.navigate("recover")
                 }
             )
@@ -55,43 +58,37 @@ fun AppNavigation(
 
         // REGISTER
         composable("register") {
-
             RegisterScreen(
-
                 onRegisterSuccess = {
-
                     navController.navigate("home"){
                         popUpTo(0)
                     }
                 },
 
                 onNavigateToLogin = {
-
                     navController.popBackStack()
                 }
             )
         }
 
         composable("recover") {
-
             RecoverScreen(
-
                 onBackClick = {
-
                     navController.popBackStack()
                 }
             )
         }
 
-
-
         // HOME
         composable("home") {
-
             HomeScreen(
-
                 navController = navController,
-                viewModel = viewModel
+                viewModel = viewModel,
+                onClickLogout = {
+                    navController.navigate("login") {
+                        popUpTo(0)
+                    }
+                }
             )
         }
 
