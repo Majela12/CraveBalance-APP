@@ -115,10 +115,24 @@ fun LoginScreen(
                     .padding(horizontal = 40.dp),
                 verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {
-                LoginField(label = "Correo Electronico:", value = email, onValueChange = { email = it }, orangeColor = orangeColor)
-                
+                LoginField(
+                    label = "Correo Electronico:",
+                    value = email,
+                    onValueChange = { email = it },
+                    orangeColor = orangeColor,
+                    error = emailError
+                )
+
                 Column {
-                    LoginField(label = "Contraseña:", value = password, onValueChange = { password = it }, orangeColor = orangeColor, isPassword = true, placeholder = "******")
+                    LoginField(
+                        label = "Contraseña:",
+                        value = password,
+                        onValueChange = { password = it },
+                        orangeColor = orangeColor,
+                        isPassword = true,
+                        placeholder = "******",
+                        error = passwordError
+                    )
                     
                     Text(
                         text = "Olvidé mi contraseña",
@@ -153,7 +167,7 @@ fun LoginScreen(
                     val isValidPassword = validarionPassword(password).first
 
                     emailError = validationEmail(email).second
-                    password = validarionPassword(password).second
+                    passwordError = validarionPassword(password).second
 
                     if (isValidEmail&&isValidPassword){
                         auth.signInWithEmailAndPassword(email, password)
@@ -216,6 +230,7 @@ private fun LoginField(
     orangeColor: Color,
     isPassword: Boolean = false,
     placeholder: String = "",
+    error: String = ""
 ) {
     Column {
         Text(
@@ -229,9 +244,7 @@ private fun LoginField(
         TextField(
             value = value,
             onValueChange = onValueChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
+            modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.White,
@@ -243,6 +256,10 @@ private fun LoginField(
             placeholder = if (placeholder.isNotEmpty()) {
                 { Text(text = placeholder, color = orangeColor.copy(alpha = 0.3f)) }
             } else null,
+            supportingText = if (error.isNotEmpty()) {
+                { Text(text = error, color = Color.Red) }
+            } else null,
+            isError = error.isNotEmpty(),
             singleLine = true
         )
     }

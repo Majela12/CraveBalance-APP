@@ -1,5 +1,6 @@
 package com.example.cravebalance.ui.element
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -20,6 +22,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
+import com.example.cravebalance.navigation.validarionPassword
+import com.example.cravebalance.navigation.validationConfirmPassword
+import com.example.cravebalance.navigation.validationEmail
+import com.example.cravebalance.navigation.validationName
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.auth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,10 +37,20 @@ fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
     onNavigateToLogin: () -> Unit
 ) {
+    val auth = Firebase.auth
+    val activity = LocalView.current.context as Activity
+
     var nombre by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var verifyPassword by remember { mutableStateOf("") }
+
+    var nameError by remember { mutableStateOf("") }
+    var emailError by remember { mutableStateOf("") }
+    var passwordError by remember { mutableStateOf("") }
+    var passwordConfirmError by remember { mutableStateOf("") }
+
+    var registerError by remember { mutableStateOf("") }
 
     val backgroundColor = Color(0xFFD6E9AF)
     val orangeColor = Color(0xFFF6921E)
@@ -99,17 +119,84 @@ fun RegisterScreen(
                     .padding(horizontal = 40.dp),
                 verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {
-                RegistrationField(label = "Nombre", value = nombre, onValueChange = { nombre = it }, orangeColor = orangeColor)
-                RegistrationField(label = "Email:", value = email, onValueChange = { email = it }, orangeColor = orangeColor)
-                RegistrationField(label = "Contraseña:", value = password, onValueChange = { password = it }, orangeColor = orangeColor, isPassword = true, placeholder = "******")
-                RegistrationField(label = "Verificar contraseña", value = verifyPassword, onValueChange = { verifyPassword = it }, orangeColor = orangeColor, isPassword = true, placeholder = "******")
+                RegistrationField(
+                    label = "Nombre",
+                    value = nombre,
+                    onValueChange = { 
+                        nombre = it 
+                        if (nameError.isNotEmpty()) nameError = ""
+                    },
+                    orangeColor = orangeColor,
+                    error = nameError
+                )
+                RegistrationField(
+                    label = "Email:",
+                    value = email,
+                    onValueChange = { 
+                        email = it 
+                        if (emailError.isNotEmpty()) emailError = ""
+                    },
+                    orangeColor = orangeColor,
+                    error = emailError
+                )
+                RegistrationField(
+                    label = "Contraseña:",
+                    value = password,
+                    onValueChange = { 
+                        password = it 
+                        if (passwordError.isNotEmpty()) passwordError = ""
+                    },
+                    orangeColor = orangeColor,
+                    isPassword = true,
+                    placeholder = "******",
+                    error = passwordError
+                )
+                RegistrationField(
+                    label = "Verificar contraseña",
+                    value = verifyPassword,
+                    onValueChange = { 
+                        verifyPassword = it 
+                        if (passwordConfirmError.isNotEmpty()) passwordConfirmError = ""
+                    },
+                    orangeColor = orangeColor,
+                    isPassword = true,
+                    placeholder = "******",
+                    error = passwordConfirmError
+                )
             }
 
             Spacer(modifier = Modifier.height(30.dp))
 
             // Action Button
             Button(
-                onClick = { onRegisterSuccess() },
+                onClick = {
+                    val resName = validationName(nombre)
+                    val resEmail = validationEmail(email)
+                    val resPass = validarionPassword(password)
+                    val resConfirm = validationConfirmPassword(password, verifyPassword)
+
+                    nameError = resName.second
+                    emailError = resEmail.second
+                    passwordError = resPass.second
+                    passwordConfirmError = resConfirm.second
+
+                    if (resName.first && resEmail.first && resPass.first && resConfirm.first) {
+                        auth.createUserWithEmailAndPassword(email,password).
+                                addOnCompleteListener(activity) { task ->
+                                    if (task.isSuccessful){
+                                        onRegisterSuccess()
+                                    }else{
+                                        registerError = when(task.isSuccessful){
+                                            is FirebaseAuthInvalidCredentialsException -> "Correo invalido"
+                                            is FirebaseAuthUserCollisionException -> "Correo ya registrado"
+                                            else -> "Error al registrarse"
+                                        }
+                                    }
+                                }
+                    }else{
+                        registerError = "Hubo un error en el registro"
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = orangeColor),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
@@ -154,7 +241,8 @@ fun RegistrationField(
     onValueChange: (String) -> Unit,
     orangeColor: Color,
     isPassword: Boolean = false,
-    placeholder: String = ""
+    placeholder: String = "",
+    error: String = ""
 ) {
     Column {
         Text(
@@ -168,9 +256,7 @@ fun RegistrationField(
         TextField(
             value = value,
             onValueChange = onValueChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
+            modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.White,
@@ -182,6 +268,10 @@ fun RegistrationField(
             placeholder = if (placeholder.isNotEmpty()) {
                 { Text(text = placeholder, color = orangeColor.copy(alpha = 0.3f)) }
             } else null,
+            supportingText = if (error.isNotEmpty()) {
+                { Text(text = error, color = Color.Red) }
+            } else null,
+            isError = error.isNotEmpty(),
             singleLine = true
         )
     }

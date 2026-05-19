@@ -60,7 +60,9 @@ fun AppNavigation(
 
                 onRegisterSuccess = {
 
-                    navController.navigate("home")
+                    navController.navigate("home"){
+                        popUpTo(0)
+                    }
                 },
 
                 onNavigateToLogin = {
