@@ -64,12 +64,10 @@ fun LoginScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Top Border
             AppleBorder()
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Main Title
             Text(
                 text = "CRAVE BALANCE",
                 color = Color.White,
@@ -80,7 +78,6 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Logo Section
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(160.dp)
@@ -108,7 +105,6 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            // Form Fields
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -160,7 +156,6 @@ fun LoginScreen(
                 )
             }
 
-            // Action Button
             Button(
                 onClick = {
                     val isValidEmail:Boolean = validationEmail(email).first
@@ -201,7 +196,6 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Navigation Link (Bottom)
             Text(
                 text = "¿No tienes cuenta? Registrate",
                 color = orangeColor,
@@ -215,7 +209,6 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Bottom Border
             AppleBorder()
         }
     }

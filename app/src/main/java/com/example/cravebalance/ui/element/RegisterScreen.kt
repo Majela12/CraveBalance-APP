@@ -68,12 +68,10 @@ fun RegisterScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Top Border
             AppleBorder()
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Main Title
             Text(
                 text = "CRAVE BALANCE",
                 color = Color.White,
@@ -84,7 +82,6 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Logo Section
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(160.dp)
@@ -112,7 +109,6 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            // Form Fields
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -167,7 +163,6 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            // Action Button
             Button(
                 onClick = {
                     val resName = validationName(nombre)
@@ -213,7 +208,6 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(15.dp))
 
-            // Navigation Link
             Text(
                 text = "Ya tengo cuenta",
                 color = orangeColor,
@@ -227,7 +221,6 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Bottom Border
             AppleBorder()
         }
     }

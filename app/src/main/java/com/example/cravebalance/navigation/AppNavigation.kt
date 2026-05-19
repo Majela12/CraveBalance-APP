@@ -38,8 +38,6 @@ fun AppNavigation(
         navController = navController,
         startDestination = myStartDestination
     ) {
-
-        // LOGIN
         composable("login") {
             LoginScreen(
                 onLoginSuccess = {
@@ -56,7 +54,6 @@ fun AppNavigation(
             )
         }
 
-        // REGISTER
         composable("register") {
             RegisterScreen(
                 onRegisterSuccess = {
@@ -79,7 +76,6 @@ fun AppNavigation(
             )
         }
 
-        // HOME
         composable("home") {
             HomeScreen(
                 navController = navController,
@@ -92,7 +88,6 @@ fun AppNavigation(
             )
         }
 
-        // DETAIL ANTOJO
         composable("craving/{type}") {
 
             val type =
@@ -105,7 +100,6 @@ fun AppNavigation(
             )
         }
 
-        // DETAIL RECETA
         composable("recipe/{title}") {
 
             val title =

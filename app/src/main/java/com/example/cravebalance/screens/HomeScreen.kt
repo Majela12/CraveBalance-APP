@@ -102,8 +102,6 @@ fun HomeScreen(
             .background(Color(0xFFF5F7F2))
             .verticalScroll(rememberScrollState())
     ) {
-
-        // HEADER
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -117,7 +115,6 @@ fun HomeScreen(
                 .background(Color(0xFFCBE39D))
                 .padding(horizontal = 16.dp)
         ) {
-            // Contenedor central para Bienvenida y Email
             Column(
                 modifier = Modifier.align(Alignment.Center),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -139,7 +136,6 @@ fun HomeScreen(
                 }
             }
 
-            // Botón de Cerrar Sesión en la esquina superior derecha
             IconButton(
                 onClick = {
                     auth.signOut()
@@ -166,7 +162,6 @@ fun HomeScreen(
             modifier = Modifier.padding(horizontal = 18.dp)
         ) {
 
-            // TITULO
             Text(
                 text = "¿De dónde vienen nuestros antojos?",
 
@@ -183,7 +178,6 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // CARD PERSONAJE
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = Color(0xFFF1F6E6)
@@ -254,7 +248,6 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // TITULO
             Text(
                 text = "Tengo antojo de...",
 
@@ -267,7 +260,6 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            // GRID
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
 
