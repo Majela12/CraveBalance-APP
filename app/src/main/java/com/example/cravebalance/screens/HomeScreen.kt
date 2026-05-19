@@ -56,6 +56,15 @@ import androidx.navigation.compose.rememberNavController
 
 import com.example.cravebalance.viewmodel.RecipeViewModel
 
+import androidx.compose.foundation.Image
+
+import androidx.compose.ui.layout.ContentScale
+
+import androidx.compose.ui.res.painterResource
+
+import com.example.cravebalance.R
+
+
 data class CravingItem(
     val title: String,
     val emoji: String
@@ -180,9 +189,18 @@ fun HomeScreen(
                         contentAlignment = Alignment.Center
                     ) {
 
-                        Text(
-                            text = "🐰",
-                            fontSize = 42.sp
+                        Image(
+                            painter = painterResource(
+                                id = R.drawable.balance
+                            ),
+
+                            contentDescription = null,
+
+                            modifier = Modifier
+                                .size(70.dp)
+                                .clip(CircleShape),
+
+                            contentScale = ContentScale.Crop
                         )
                     }
 

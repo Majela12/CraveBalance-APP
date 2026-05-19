@@ -1,5 +1,6 @@
 package com.example.cravebalance.ui.element
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,6 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -16,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
+import com.example.cravebalance.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,30 +58,14 @@ fun RecoverScreen(onBackClick: () -> Unit) {
                 // Character / Logo Section
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.size(180.dp)
+                    modifier = Modifier.size(160.dp)
                 ) {
-                    // Apple Character Placeholder (Using emoji for visual representation)
-                    Text(
-                        text = "🍎",
-                        fontSize = 120.sp,
-                        modifier = Modifier.offset(y = (-10).dp)
+                    Image(
+                        painter = painterResource(id = R.drawable.logo_cravebalance),
+                        contentDescription = "Logo Crave Balance",
+                        modifier = Modifier.size(160.dp),
+                        contentScale = ContentScale.Fit
                     )
-
-                    // "CRAVE BALANCE" Banner
-                    Surface(
-                        color = bannerGreen,
-                        shape = RoundedCornerShape(4.dp),
-                        modifier = Modifier
-                            .offset(y = 35.dp)
-                    ) {
-                        Text(
-                            text = "CRAVE BALANCE",
-                            color = Color.White,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Black,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp)
-                        )
-                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

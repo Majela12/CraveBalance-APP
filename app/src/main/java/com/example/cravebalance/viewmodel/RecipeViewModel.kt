@@ -8,6 +8,7 @@ import com.example.cravebalance.data.repository.RecipeRepository
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 import kotlinx.coroutines.launch
 
@@ -15,21 +16,26 @@ class RecipeViewModel(
     private val repository: RecipeRepository
 ) : ViewModel() {
 
-    // LISTA DE RECETAS
     private val _recipes =
         MutableStateFlow<List<Recipe>>(emptyList())
 
     val recipes: StateFlow<List<Recipe>> =
-        _recipes
+        _recipes.asStateFlow()
 
-    // RECETA SELECCIONADA
-    private val _selectedRecipe =
-        MutableStateFlow<Recipe?>(null)
+    init {
 
-    val selectedRecipe: StateFlow<Recipe?> =
-        _selectedRecipe
+        loadAllRecipes()
+    }
 
-    // CARGAR RECETAS POR ANTOJO
+    private fun loadAllRecipes() {
+
+        viewModelScope.launch {
+
+            _recipes.value =
+                repository.getAllRecipes()
+        }
+    }
+
     fun loadRecipesByCraving(
         craving: String
     ) {
@@ -41,15 +47,20 @@ class RecipeViewModel(
         }
     }
 
-    // CARGAR RECETA
-    fun loadRecipe(
+    fun loadRecipeByTitle(
         title: String
     ) {
 
         viewModelScope.launch {
 
-            _selectedRecipe.value =
+            val recipe =
                 repository.getRecipeByTitle(title)
+
+            _recipes.value =
+                if (recipe != null)
+                    listOf(recipe)
+                else
+                    emptyList()
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.cravebalance.ui.element
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -20,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
+import com.example.cravebalance.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,25 +73,12 @@ fun RegisterScreen(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(160.dp)
             ) {
-                Text(
-                    text = "🍎",
-                    fontSize = 100.sp,
-                    modifier = Modifier.offset(y = (-10).dp)
+                Image(
+                    painter = painterResource(id = R.drawable.logo_cravebalance),
+                    contentDescription = "Logo Crave Balance",
+                    modifier = Modifier.size(160.dp),
+                    contentScale = ContentScale.Fit
                 )
-
-                Surface(
-                    color = bannerGreen,
-                    shape = RoundedCornerShape(4.dp),
-                    modifier = Modifier.offset(y = 30.dp)
-                ) {
-                    Text(
-                        text = "CRAVE BALANCE",
-                        color = Color.White,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Black,
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp)
-                    )
-                }
             }
 
             Spacer(modifier = Modifier.height(30.dp))

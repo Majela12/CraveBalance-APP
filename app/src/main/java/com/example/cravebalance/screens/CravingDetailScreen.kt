@@ -44,6 +44,8 @@ import androidx.navigation.NavController
 
 import com.example.cravebalance.viewmodel.RecipeViewModel
 
+import com.example.cravebalance.R
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CravingDetailScreen(
@@ -214,9 +216,18 @@ fun CravingDetailScreen(
                     contentAlignment = Alignment.Center
                 ) {
 
-                    Text(
-                        text = "👧",
-                        fontSize = 60.sp
+                    Image(
+                        painter = painterResource(
+                            id = R.drawable.pensar
+                        ),
+
+                        contentDescription = null,
+
+                        modifier = Modifier
+                            .size(90.dp)
+                            .clip(CircleShape),
+
+                        contentScale = ContentScale.Crop
                     )
                 }
             }

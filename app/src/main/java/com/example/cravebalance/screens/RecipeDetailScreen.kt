@@ -40,17 +40,27 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.cravebalance.R
 
-import com.example.cravebalance.data.repository.RecipeRepository
+import androidx.compose.runtime.getValue
+import com.example.cravebalance.viewmodel.RecipeViewModel
 
 @Composable
 fun RecipeDetailScreen(
 
     recipeTitle: String,
 
-    navController: NavController
+    navController: NavController,
+
+    viewModel: RecipeViewModel
 ) {
 
-    val recipe = RecipeRepository.recipes.find {
+    val recipes by viewModel.recipes.collectAsState()
+
+    LaunchedEffect(recipeTitle) {
+
+        viewModel.loadRecipeByTitle(recipeTitle)
+    }
+
+    val recipe = recipes.find {
 
         it.title == recipeTitle
     }
@@ -248,9 +258,18 @@ fun RecipeDetailScreen(
                     contentAlignment = Alignment.Center
                 ) {
 
-                    Text(
-                        text = "👩",
-                        fontSize = 60.sp
+                    Image(
+                        painter = painterResource(
+                            id = R.drawable.cocinar
+                        ),
+
+                        contentDescription = null,
+
+                        modifier = Modifier
+                            .size(90.dp)
+                            .clip(CircleShape),
+
+                        contentScale = ContentScale.Crop
                     )
                 }
 
@@ -288,56 +307,105 @@ fun RecipeDetailScreen(
 
         Spacer(modifier = Modifier.height(26.dp))
 
-        Button(
-            onClick = {
+        if (!showPreparation) {
 
-                if (
-                    currentStep <
-                    stepsList.size - 1
+            Button(
+                onClick = {
+
+                    showPreparation = true
+                },
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFCBE39D)
+                ),
+
+                shape = RoundedCornerShape(18.dp)
+            ) {
+
+                Text(
+                    text = "COMENZAR",
+
+                    color = Color.White,
+
+                    fontWeight = FontWeight.Bold,
+
+                    fontSize = 16.sp
+                )
+            }
+
+        } else {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Button(
+                    onClick = {
+
+                        if (currentStep > 0) {
+
+                            currentStep--
+                        }
+                    },
+
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFFB74D)
+                    ),
+
+                    shape = RoundedCornerShape(16.dp)
                 ) {
 
-                    currentStep++
+                    Text(
+                        text = "← Anterior",
+                        color = Color.White
+                    )
                 }
-            },
 
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
+                Button(
+                    onClick = {
 
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFCBE39D)
-            ),
+                        if (currentStep < stepsList.size - 1) {
 
-            shape = RoundedCornerShape(18.dp)
-        ) {
+                            currentStep++
+                        }
+                    },
 
-            Text(
-                text = "LISTO",
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFCBE39D)
+                    ),
 
-                color = Color.White,
+                    shape = RoundedCornerShape(16.dp)
+                ) {
 
-                fontWeight = FontWeight.Bold,
-
-                fontSize = 16.sp
-            )
+                    Text(
+                        text = "Siguiente →",
+                        color = Color.White
+                    )
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(30.dp))
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true)
 @Composable
 fun PreviewRecipeDetailScreen() {
 
     MaterialTheme {
 
-        Surface {
-
-            RecipeDetailScreen(
-                recipeTitle = "Smoothie de chocolate ANTI-ANTOJOS",
-                navController = rememberNavController()
-            )
-        }
+        Text(
+            text = "Preview no disponible con ViewModel",
+            modifier = Modifier.padding(20.dp)
+        )
     }
 }

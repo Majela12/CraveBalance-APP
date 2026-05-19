@@ -30,6 +30,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.auth
 import kotlin.math.log
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import com.example.cravebalance.R
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,26 +90,14 @@ fun LoginScreen(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(160.dp)
             ) {
-                Text(
-                    text = "🍎",
-                    fontSize = 100.sp,
-                    modifier = Modifier.offset(y = (-10).dp)
+                Image(
+                    painter = painterResource(id = R.drawable.logo_cravebalance),
+                    contentDescription = "Logo Crave Balance",
+                    modifier = Modifier.size(160.dp),
+                    contentScale = ContentScale.Fit
                 )
-
-                Surface(
-                    color = bannerGreen,
-                    shape = RoundedCornerShape(4.dp),
-                    modifier = Modifier.offset(y = 30.dp)
-                ) {
-                    Text(
-                        text = "CRAVE BALANCE",
-                        color = Color.White,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Black,
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp)
-                    )
-                }
             }
+
 
             Spacer(modifier = Modifier.height(30.dp))
 
