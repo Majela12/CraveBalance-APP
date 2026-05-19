@@ -80,7 +80,6 @@ fun CravingDetailScreen(
         else -> "🍽️"
     }
 
-    // EXPLICACION
     val explanation = when (craving) {
 
         "Chocolate" ->
@@ -113,7 +112,6 @@ fun CravingDetailScreen(
             .padding(16.dp)
     ) {
 
-        // BOTON VOLVER
         Box(
             modifier = Modifier
                 .size(42.dp)
@@ -136,7 +134,6 @@ fun CravingDetailScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // EMOJI
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -153,7 +150,6 @@ fun CravingDetailScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // TITULO
         Text(
             text = craving.uppercase(),
 
@@ -170,7 +166,6 @@ fun CravingDetailScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        // CARD EXPLICACION
         Card(
             modifier = Modifier.fillMaxWidth(),
 

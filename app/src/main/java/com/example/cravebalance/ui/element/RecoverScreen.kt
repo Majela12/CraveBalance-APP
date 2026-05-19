@@ -26,7 +26,6 @@ import com.example.cravebalance.R
 fun RecoverScreen(onBackClick: () -> Unit) {
     var email by remember { mutableStateOf("") }
 
-    // Colors based on the provided design image
     val backgroundColor = Color(0xFFD6E9AF)
     val orangeColor = Color(0xFFF6921E)
     val bannerGreen = Color(0xFF8DB04B)
@@ -44,10 +43,8 @@ fun RecoverScreen(onBackClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Top Decorative Apple Row
             AppleBorder()
 
-            // Main Content Area
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -55,7 +52,6 @@ fun RecoverScreen(onBackClick: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // Character / Logo Section
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.size(160.dp)
@@ -70,7 +66,6 @@ fun RecoverScreen(onBackClick: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Title
                 Text(
                     text = "¿Olvidaste tu\ncontraseña?",
                     color = titleWhite,
@@ -81,8 +76,7 @@ fun RecoverScreen(onBackClick: () -> Unit) {
                 )
 
                 Spacer(modifier = Modifier.height(50.dp))
-
-                // Input Field Section
+                
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -118,7 +112,6 @@ fun RecoverScreen(onBackClick: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(40.dp))
 
-                // Action Button
                 Button(
                     onClick = { onBackClick() },
                     colors = ButtonDefaults.buttonColors(containerColor = orangeColor),
@@ -136,7 +129,6 @@ fun RecoverScreen(onBackClick: () -> Unit) {
                 }
             }
 
-            // Bottom Decorative Apple Row
             AppleBorder()
         }
     }
