@@ -55,6 +55,9 @@ fun RecipeDetailScreen(
         it.title == recipeTitle
     }
 
+    val ingredientsList = recipe?.ingredients?.split("\n") ?: emptyList()
+    val stepsList = recipe?.steps?.split("\n") ?: emptyList()
+
     var showPreparation by remember {
 
         mutableStateOf(false)
@@ -147,7 +150,7 @@ fun RecipeDetailScreen(
 
         Spacer(modifier = Modifier.height(14.dp))
 
-        recipe?.ingredients?.forEach { ingredient ->
+        ingredientsList.forEach { ingredient ->
 
             var checked by remember {
 
@@ -256,7 +259,7 @@ fun RecipeDetailScreen(
                 Text(
                     text =
                         if (showPreparation)
-                            recipe?.steps?.get(currentStep) ?: ""
+                            stepsList.getOrNull(currentStep) ?: ""
                         else
                             "Toca el personaje para comenzar",
 
@@ -273,7 +276,7 @@ fun RecipeDetailScreen(
 
                     Text(
                         text =
-                            "Paso ${currentStep + 1} de ${recipe?.steps?.size}",
+                            "Paso ${currentStep + 1} de ${stepsList.size}",
 
                         color = Color(0xFFFF9800),
 
@@ -290,7 +293,7 @@ fun RecipeDetailScreen(
 
                 if (
                     currentStep <
-                    (recipe?.steps?.size ?: 1) - 1
+                    stepsList.size - 1
                 ) {
 
                     currentStep++

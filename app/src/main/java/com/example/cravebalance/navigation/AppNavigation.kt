@@ -114,8 +114,7 @@ fun AppNavigation(
 
             RecipeDetailScreen(
                 recipeTitle = title,
-                navController = navController,
-                viewModel = viewModel
+                navController = navController
             )
         }
     }
