@@ -9,7 +9,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,6 +31,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -55,6 +64,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
 import com.example.cravebalance.viewmodel.RecipeViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 import androidx.compose.foundation.Image
 
@@ -74,8 +85,11 @@ data class CravingItem(
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: RecipeViewModel? = null
+    viewModel: RecipeViewModel? = null,
+    onClickLogout: () -> Unit = {}
 ) {
+    val auth = Firebase.auth
+    val user = auth.currentUser
 
     val cravings = listOf(
 
@@ -97,8 +111,6 @@ fun HomeScreen(
             .background(Color(0xFFF5F7F2))
             .verticalScroll(rememberScrollState())
     ) {
-
-        // HEADER
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -110,26 +122,45 @@ fun HomeScreen(
                     )
                 )
                 .background(Color(0xFFCBE39D))
+                .padding(horizontal = 16.dp)
         ) {
-
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 18.dp),
-
+                modifier = Modifier.align(Alignment.Center),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                Spacer(modifier = Modifier.height(30.dp))
-
                 Text(
                     text = "BIENVENIDO",
-
-                    fontSize = 30.sp,
-
+                    fontSize = 28.sp,
                     fontWeight = FontWeight.ExtraBold,
-
                     color = Color.White
+                )
+
+                if (user != null) {
+                    Text(
+                        text = user.email.toString(),
+                        fontSize = 14.sp,
+                        color = Color.White.copy(alpha = 0.9f),
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+
+            IconButton(
+                onClick = {
+                    auth.signOut()
+                    onClickLogout()
+                },
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 12.dp),
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = Color.White
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ExitToApp,
+                    contentDescription = "Cerrar sesión",
+                    modifier = Modifier.size(28.dp)
                 )
             }
         }
@@ -140,7 +171,6 @@ fun HomeScreen(
             modifier = Modifier.padding(horizontal = 18.dp)
         ) {
 
-            // TITULO
             Text(
                 text = "¿De dónde vienen nuestros antojos?",
 
@@ -157,7 +187,6 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // CARD PERSONAJE
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = Color(0xFFF1F6E6)
@@ -237,7 +266,6 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // TITULO
             Text(
                 text = "Tengo antojo de...",
 
@@ -250,7 +278,6 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            // GRID
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
 
